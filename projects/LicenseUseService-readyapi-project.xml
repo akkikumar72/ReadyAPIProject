@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="583ba223-8996-4114-b37b-9487d2207942" created="2.6.0" activeEnvironment="Default environment" name="LicenseUseService" resourceRoot="${projectDir}" updated="2.8.0 2019-07-23T17:43:45Z" encryptionMode="Not encrypted" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:interface xsi:type="con:RestService" id="3c900a77-6006-45dd-a698-580bbf244087" name="License Use API" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification" definitionUrl="file:/home/fredrik/code/testengine-online-license-check/src/OAS/License%20Use%20API-oas30-apigateway.yaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:description xsi:nil="true"/>
+    <con:settings/>
+    <con:definitionCache type="TEXT" rootPart="file:/home/fredrik/code/testengine-online-license-check/src/OAS/License%20Use%20API-oas30-apigateway.yaml">
+      <con:part>
+        <con:url>file:/home/fredrik/code/testengine-online-license-check/src/OAS/License%20Use%20API-oas30-apigateway.yaml</con:url>
+        <con:content>openapi: "3.0.1"
+                    info:
+                    title: "License Use API"
+                    version: "1.0.0-oas3"
+                    servers:
+                    - url: "https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/{basePath}"
+                    variables:
+                    basePath:
+                    default: "/dev"
+                    paths:
+                    /update:
+                    post:
+                    requestBody:
+                    content:
+                    application/json:
+                    schema:
+                    $ref: "#/components/schemas/LicenseInformation"
+                    required: true
+                    responses:
+                    200:
+                    description: "200 response"
+                    content:
+                    application/json:
+                    schema:
+                    $ref: "#/components/schemas/LicenseUsageReply"
+                    403:
+                    description: "403 response"
+                    content: {}
+                    security:
+                    - api_key: []
+                    x-amazon-apigateway-request-validator: "Validate body"
+                    x-amazon-apigateway-integration:
+                    uri:
+                    "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:796340070587:function:licenseUpdateToken:${stageVariables.lambdaAlias}/invocations"
+                    responses:
+                    default:
+                    statusCode: "200"
+                    responseTemplates:
+                    application/json: "{\n \"updateToken\": \"$input.path('$.body').updateToken\"\
+                    \n}"
+                    .*"status"[ :]*403.*:
+                    statusCode: "403"
+                    responseTemplates:
+                    application/json: "$input.path('$.errorMessage')"
+                    passthroughBehavior: "when_no_templates"
+                    httpMethod: "POST"
+                    requestTemplates:
+                    application/json: "## See
+                    http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n\
+                    ## This template will pass through all parameters including path, querystring,\
+                    \ header, stage variables, and context through to the integration endpoint\
+                    \ via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\"\
+                    \ : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n\
+                    \ #set($params = $allParams.get($type))\n\"$type\" : {\n #foreach($paramName\
+                    \ in $params.keySet())\n \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\
+                    \n #if($foreach.hasNext),#end\n #end\n}\n #if($foreach.hasNext),#end\n\
+                    #end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\
+                    \"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n \
+                    \ #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n \"account-id\"\
+                    \ : \"$context.identity.accountId\",\n \"api-id\" : \"$context.apiId\"\
+                    ,\n \"api-key\" : \"$context.identity.apiKey\",\n \"authorizer-principal-id\"\
+                    \ : \"$context.authorizer.principalId\",\n \"caller\" : \"$context.identity.caller\"\
+                    ,\n \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\"\
+                    ,\n \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\"\
+                    ,\n \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\"\
+                    ,\n \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\"\
+                    ,\n \"http-method\" : \"$context.httpMethod\",\n \"stage\" : \"\
+                    $context.stage\",\n \"source-ip\" : \"$context.identity.sourceIp\"\
+                    ,\n \"user\" : \"$context.identity.user\",\n \"user-agent\" : \"\
+                    $context.identity.userAgent\",\n \"user-arn\" : \"$context.identity.userArn\"\
+                    ,\n \"request-id\" : \"$context.requestId\",\n \"resource-id\" :\
+                    \ \"$context.resourceId\",\n \"resource-path\" : \"$context.resourcePath\"\
+                    \n }\n}\n"
+                    contentHandling: "CONVERT_TO_TEXT"
+                    type: "aws"
+                    /start:
+                    post:
+                    operationId: "startOfUse"
+                    requestBody:
+                    content:
+                    application/json:
+                    schema:
+                    $ref: "#/components/schemas/LicenseInformation"
+                    required: true
+                    responses:
+                    400:
+                    description: "400 response"
+                    content: {}
+                    200:
+                    description: "200 response"
+                    content:
+                    application/json:
+                    schema:
+                    $ref: "#/components/schemas/LicenseUsageReply"
+                    security:
+                    - api_key: []
+                    x-amazon-apigateway-request-validator: "Validate body"
+                    x-amazon-apigateway-integration:
+                    uri:
+                    "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:796340070587:function:licenseUseStartUsage:${stageVariables.lambdaAlias}/invocations"
+                    responses:
+                    default:
+                    statusCode: "200"
+                    responseTemplates:
+                    application/json: "{\n \"updateToken\": \"$input.path('$.body').updateToken\"\
+                    \n}"
+                    .*status.*400.*:
+                    statusCode: "400"
+                    responseTemplates:
+                    application/json: "$input.path('$.errorMessage')"
+                    passthroughBehavior: "when_no_templates"
+                    httpMethod: "POST"
+                    requestTemplates:
+                    application/json: "## See
+                    http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html\n\
+                    ## This template will pass through all parameters including path, querystring,\
+                    \ header, stage variables, and context through to the integration endpoint\
+                    \ via the body/payload\n#set($allParams = $input.params())\n{\n\"body-json\"\
+                    \ : $input.json('$'),\n\"params\" : {\n#foreach($type in $allParams.keySet())\n\
+                    \ #set($params = $allParams.get($type))\n\"$type\" : {\n #foreach($paramName\
+                    \ in $params.keySet())\n \"$paramName\" : \"$util.escapeJavaScript($params.get($paramName))\"\
+                    \n #if($foreach.hasNext),#end\n #end\n}\n #if($foreach.hasNext),#end\n\
+                    #end\n},\n\"stage-variables\" : {\n#foreach($key in $stageVariables.keySet())\n\
+                    \"$key\" : \"$util.escapeJavaScript($stageVariables.get($key))\"\n \
+                    \ #if($foreach.hasNext),#end\n#end\n},\n\"context\" : {\n \"account-id\"\
+                    \ : \"$context.identity.accountId\",\n \"api-id\" : \"$context.apiId\"\
+                    ,\n \"api-key\" : \"$context.identity.apiKey\",\n \"authorizer-principal-id\"\
+                    \ : \"$context.authorizer.principalId\",\n \"caller\" : \"$context.identity.caller\"\
+                    ,\n \"cognito-authentication-provider\" : \"$context.identity.cognitoAuthenticationProvider\"\
+                    ,\n \"cognito-authentication-type\" : \"$context.identity.cognitoAuthenticationType\"\
+                    ,\n \"cognito-identity-id\" : \"$context.identity.cognitoIdentityId\"\
+                    ,\n \"cognito-identity-pool-id\" : \"$context.identity.cognitoIdentityPoolId\"\
+                    ,\n \"http-method\" : \"$context.httpMethod\",\n \"stage\" : \"\
+                    $context.stage\",\n \"source-ip\" : \"$context.identity.sourceIp\"\
+                    ,\n \"user\" : \"$context.identity.user\",\n \"user-agent\" : \"\
+                    $context.identity.userAgent\",\n \"user-arn\" : \"$context.identity.userArn\"\
+                    ,\n \"request-id\" : \"$context.requestId\",\n \"resource-id\" :\
+                    \ \"$context.resourceId\",\n \"resource-path\" : \"$context.resourcePath\"\
+                    \n }\n}\n"
+                    contentHandling: "CONVERT_TO_TEXT"
+                    type: "aws"
+                    components:
+                    schemas:
+                    LicenseInformation:
+                    required:
+                    - "client"
+                    - "id"
+                    type: "object"
+                    properties:
+                    id:
+                    type: "string"
+                    description: "The unique license identifier"
+                    client:
+                    type: "string"
+                    description: "The unique license client identifier"
+                    product:
+                    type: "string"
+                    description: "A string identifying the product being used"
+                    version:
+                    type: "string"
+                    description: "Version of the product being used"
+                    updateToken:
+                    type: "string"
+                    description: "A string with a token to use on next call"
+                    LicenseUsageReply:
+                    type: "object"
+                    properties:
+                    updateToken:
+                    type: "string"
+                    description: "A string with a token to use on next call"
+                    securitySchemes:
+                    api_key:
+                    type: "apiKey"
+                    name: "x-api-key"
+                    in: "header"
+                    x-amazon-apigateway-request-validators:
+                    Validate body:
+                    validateRequestParameters: false
+                    validateRequestBody: true</con:content>
+        <con:type>https://swagger.io/openapiv3/specification</con:type>
+      </con:part>
+    </con:definitionCache>
+    <con:endpoints>
+      <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com//dev</con:endpoint>
+    </con:endpoints>
+    <con:resource name="/update" path="/update" id="14a0b441-4979-4c81-8509-4e47fd2004ed">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="POST" id="8058644f-cefb-46af-af59-a000b665f280" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:description>200 response</con:description>
+          <con:sampleContent>{
+                        "updateToken" : "string"
+                        }</con:sampleContent>
+        </con:representation>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+          <con:sampleContent>{
+                        "id" : "string",
+                        "client" : "string",
+                        "product" : "string",
+                        "version" : "string",
+                        "updateToken" : "string"
+                        }</con:sampleContent>
+        </con:representation>
+        <con:request name="Request 1" id="7ca56bd9-6d29-4a3d-9ee9-c9f9d89de502" mediaType="application/json">
+          <con:settings/>
+          <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com//dev</con:endpoint>
+          <con:request>{
+                        "id" : "string",
+                        "client" : "string",
+                        "product" : "string",
+                        "version" : "string",
+                        "updateToken" : "string"
+                        }</con:request>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="/start" path="/start" id="6999c765-baaf-40a4-8a1e-4257e0537bf0">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="startOfUse" id="dd600e4f-2166-4330-9937-468b8300f64c" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:description>200 response</con:description>
+          <con:sampleContent>{
+                        "updateToken" : "string"
+                        }</con:sampleContent>
+        </con:representation>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+          <con:sampleContent>{
+                        "id" : "string",
+                        "client" : "string",
+                        "product" : "string",
+                        "version" : "string",
+                        "updateToken" : "string"
+                        }</con:sampleContent>
+        </con:representation>
+        <con:request name="Request 1" id="10799610-29ad-464c-afb2-0381b5ae76db" mediaType="application/json">
+          <con:settings/>
+          <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com//dev</con:endpoint>
+          <con:request>{
+                        "id" : "string",
+                        "client" : "string",
+                        "product" : "string",
+                        "version" : "string",
+                        "updateToken" : "string"
+                        }</con:request>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  <con:testSuite id="cf889160-beeb-4eb5-80ee-6898a5aeed92" name="TestSuite 1">
+    <con:settings/>
+    <con:savedRecentRuns>1</con:savedRecentRuns>
+    <con:runType>SEQUENTIAL</con:runType>
+    <con:testCase id="e5224227-19f9-48b5-8caf-14d1fe0de748" discardOkResults="true" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="TestCase 1" searchProperties="true" timeout="0">
+      <con:settings/>
+      <con:savedRecentRuns>1</con:savedRecentRuns>
+      <con:testStep type="restrequest" name="/start POST Request 1" id="4cc4b77c-3e35-4cfe-9140-37287037ebdd">
+        <con:settings/>
+        <con:config service="License Use API" resourcePath="/start" methodName="startOfUse" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="/start POST Request 1" id="10799610-29ad-464c-afb2-0381b5ae76db" mediaType="application/json" postQueryString="false">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="x-api-key" value="4AdfHixYzs5a58LMYsC7w20BUZKEWyix6QRQoYQx" xmlns="http://eviware.com/soapui/config"/></con:setting>
+            </con:settings>
+            <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/dev</con:endpoint>
+            <con:request>{
+	"id": "[2019-07-17 00:00:00] RTS0-1Y-SBN-NL - 9d02563e-9cdc-4955-ae3f-36f20529b1d3",
+	"client": "john",
+	"product": "ReadyAPI",
+	"version": "2.7"
+}</con:request>
+            <con:originalUri>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/dev/start</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="641d9961-7f44-40d3-b5e1-55290519aa47" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>200</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+              <con:authType>No Authorization</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/>
+            <con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="/update POST Request 1" id="12b3ee4a-293e-4031-abfb-dcbf9fc0f552">
+        <con:settings/>
+        <con:config service="License Use API" resourcePath="/update" methodName="POST" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="/update POST Request 1" id="7ca56bd9-6d29-4a3d-9ee9-c9f9d89de502" mediaType="application/json" postQueryString="false">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="x-api-key" value="4AdfHixYzs5a58LMYsC7w20BUZKEWyix6QRQoYQx" xmlns="http://eviware.com/soapui/config"/></con:setting>
+            </con:settings>
+            <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/dev</con:endpoint>
+            <con:request>{
+                            "id" : "sample-license-id",
+                            "client" : "john",
+                            "updateToken": "SQf4Fi7JYEUBCJsbHS2le0N7eI8xm0"
+                            }</con:request>
+            <con:originalUri>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/dev/update</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="51b1386a-c731-4333-a19d-65d24d976c4d" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>200</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:assertion type="SwaggerComplianceAssertion" id="56505206-8f39-442b-8511-50265f63c341" name="Swagger Compliance Assertion">
+              <con:configuration>
+                <swaggerUrl>file:/home/fredrik/code/testengine-online-license-check/src/OAS/License%20Use%20API-oas30-apigateway.yaml</swaggerUrl>
+                <strictMode>true</strictMode>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+              <con:authType>No Authorization</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/>
+            <con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="Attempt to use updateToken twice" id="69c6ce4d-6003-424c-9c98-ac6db44670aa">
+        <con:settings/>
+        <con:config service="License Use API" resourcePath="/update" methodName="POST" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="Attempt to use updateToken twice" id="7ca56bd9-6d29-4a3d-9ee9-c9f9d89de502" mediaType="application/json" postQueryString="false">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry
+                                key="x-api-key" value="4AdfHixYzs5a58LMYsC7w20BUZKEWyix6QRQoYQx"
+                                xmlns="http://eviware.com/soapui/config"/></con:setting>
+            </con:settings>
+            <con:endpoint>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com//dev</con:endpoint>
+            <con:request>{
+                            "id" : "sample-license-id",
+                            "client" : "john",
+                            "updateToken": "${/start POST Request 1#Response#$['updateToken']}"
+                            }</con:request>
+            <con:originalUri>https://2hqabhibd1.execute-api.us-east-2.amazonaws.com/dev/update</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="51b1386a-c731-4333-a19d-65d24d976c4d" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>403</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:assertion type="SwaggerComplianceAssertion" id="56505206-8f39-442b-8511-50265f63c341" name="Swagger Compliance Assertion">
+              <con:configuration>
+                <swaggerUrl>file:/home/fredrik/code/testengine-online-license-check/src/OAS/License%20Use%20API-oas30-apigateway.yaml</swaggerUrl>
+                <strictMode>true</strictMode>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+              <con:authType>No Authorization</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/>
+            <con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:properties/>
+      <con:reportParameters/>
+      <con:breakPoints>
+        <con:testStepId>4cc4b77c-3e35-4cfe-9140-37287037ebdd</con:testStepId>
+        <con:status>NONE</con:status>
+        <con:properties/>
+      </con:breakPoints>
+      <con:breakPoints>
+        <con:testStepId>12b3ee4a-293e-4031-abfb-dcbf9fc0f552</con:testStepId>
+        <con:status>NONE</con:status>
+        <con:properties/>
+      </con:breakPoints>
+    </con:testCase>
+    <con:properties/>
+    <con:reportParameters/>
+  </con:testSuite>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:requirements/>
+  <con:properties/>
+  <con:wssContainer/>
+  <con:databaseConnectionContainer/>
+  <con:jmsConnectionContainer/>
+  <con:oAuth2ProfileContainer/>
+  <con:oAuth1ProfileContainer/>
+  <con:reporting>
+    <con:reportTemplates/>
+    <con:xmlTemplates/>
+    <con:xmlTemplates/>
+    <con:parameters/>
+    <con:parameters/>
+  </con:reporting>
+  <con:reporting/>
+  <con:eventHandlers type="RequestFilter.filterRequest" name="RequestFilter.filterRequest">
+    <con:script>// Sample event script to add custom HTTP header to all outgoing REST, SOAP and HTTP(S) calls
+            // This code is often used for adding custom authentication to SoapUI Pro tests
+
+            // If hardcoding the token, uncomment and change line 5
+            // def token = '4567'
+
+            // If your token is parameterized in Project level custom property, uncomment line 8
+            // def token = request.parent.testCase.testSuite.project.getProperty('auth_token').getValue()
+
+            // To modify all outgoing calls, remove comments from lines 11 to 16
+            // def headers = request.requestHeaders
+            // if (headers.containsKey('auth_token2') == false) {
+            // headers.put('auth_token2', token)
+            // request.requestHeaders = headers
+            // }</con:script>
+  </con:eventHandlers>
+  <con:eventHandlers type="TestRunListener.afterStep" name="TestRunListener.afterStep">
+    <con:script>// Save all test step results into files
+            // Change the directory path in line 5 to a location where you want to store details
+            // then uncomment lines 5 to 10
+
+            // filePath = 'C:\\tempOutputDirectory\\'
+            // fos = new FileOutputStream(filePath + testStepResult.testStep.label + '.txt', true)
+            // pw = new PrintWriter(fos)
+            // testStepResult.writeTo(pw)
+            // pw.close()
+            // fos.close()</con:script>
+  </con:eventHandlers>
+  <con:authRepository/>
+  <con:tags/>
+</con:soapui-project>
